@@ -1,0 +1,453 @@
+package com.zedo.aiwebres;
+
+import java.util.HashMap;
+
+import gnu.math.IntNum;
+
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.view.ViewGroup;
+import android.view.View;
+
+import com.google.appinventor.components.runtime.*;
+import com.google.appinventor.components.annotations.*;
+import com.google.appinventor.components.runtime.util.YailList;
+import com.google.appinventor.components.common.ComponentCategory;
+
+@DesignerComponent(
+    version = 1,
+    description = "This is an extension that allows you to customize the corner radii of an element. You can specify the radii for the top, bottom, left, and right corners.",
+    category = ComponentCategory.EXTENSION,
+    nonVisible = true,
+    iconName = "https://i.imgur.com/Q1gD75M.png")
+@SimpleObject(external = true)
+public class ExtensionGUI extends AndroidNonvisibleComponent {
+    
+    // Color dictionary
+    private HashMap<AndroidViewComponent, Integer> originalColors = new HashMap<>();
+
+    public ExtensionGUI(ComponentContainer container) {
+        super(container.$form());
+    }
+
+    @SimpleFunction(description = "Ver el tipo de dato del componente.")
+    public void TipoDato(AndroidViewComponent component, Object value){
+        if (component instanceof Label) {
+            Label label = (Label) component;
+            String texto = value.getClass().getName();
+            label.Text(texto);
+        } 
+    }
+
+    //////////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////Section: Background//////////////////////////////////////
+
+
+    /**
+     * Change the background color of a component.
+     *
+     * @param component The component to change the background color of.
+     * @param colorValue The color value, which can be an integer, HEX string, RGB, or ARGB.
+     * @throws IllegalArgumentException If the component is null, the color value is invalid, or the type is not supported.
+     */
+    @SimpleFunction(description = "Change background color (HEX, RGB, ARGB, Integer, or color blocks)")
+    public void ChangeBackgroundColor(Object components, Object colorValue) {
+        if (components == null) {
+            throw new IllegalArgumentException("The component cannot be null.");
+        }
+        int backgroundColor;
+        try {
+            if (colorValue instanceof Integer) {
+                // Convert an integer value to a color
+                backgroundColor = (int) colorValue;
+            } 
+            else if (colorValue instanceof IntNum) {
+                // Explicit casting to gnu.math.IntNum
+                IntNum colorIntNum = (IntNum) colorValue;
+                backgroundColor = colorIntNum.intValue();
+            }
+            else if (colorValue instanceof String) {
+                String colorString = (String) colorValue;
+                if (colorString.matches("^(?:#?[0-9a-fA-F]{6})$")) {
+                    // Value in hexadecimal format (RRGGBB)
+                    if (!colorString.startsWith("#")){
+                        colorString = "#" + colorString;
+                    }
+                    backgroundColor = Color.parseColor(colorString);
+                }
+                else if (colorString.matches("^(#?[0-9a-fA-F]{8})$")) {
+                    // Value in ARGB format (AARRGGBB)
+                    backgroundColor = Color.parseColor(colorString); 
+                }
+                else if (colorString.matches("^\\s*(\\d{1,3})\\s*,\\s*(\\d{1,3})\\s*,\\s*(\\d{1,3})\\s*$")) {
+                    // Value in RGB format ("255, 0, 0")
+                    String[] rgb = colorString.split(",");
+                    if (rgb.length == 3) {
+                        int r = Integer.parseInt(rgb[0].trim());
+                        int g = Integer.parseInt(rgb[1].trim());
+                        int b = Integer.parseInt(rgb[2].trim());
+                        backgroundColor = Color.rgb(r, g, b);
+                    }
+                    else {
+                        throw new IllegalArgumentException("Invalid RGB value. Use the format R, G, B (e.g., 255, 0, 0 for red).");
+                    }
+                } 
+                else {
+                    throw new IllegalArgumentException("Invalid color value. Use HEX format (#RRGGBB or RRGGBB), RGB (R, G, B), or ARGB (#AARRGGBB).");
+                }
+            } 
+            else {
+                throw new IllegalArgumentException("Unsupported value type. Use an integer value or a string.");
+            }
+
+            if (components instanceof AndroidViewComponent) {
+                // The argument is an individual component
+                AndroidViewComponent component = (AndroidViewComponent) components;
+                ApplyBackgroundColor(component, backgroundColor);
+            } else if (components instanceof YailList) {
+                // The argument is a list of components
+                YailList componentList = (YailList) components;
+                for (Object componentObj : componentList.toArray()) {
+                    if (componentObj instanceof AndroidViewComponent) {
+                        AndroidViewComponent component = (AndroidViewComponent) componentObj;
+                        ApplyBackgroundColor(component, backgroundColor);
+                    }
+                }
+            } else {
+                throw new IllegalArgumentException("The components argument is not valid. It should be a component or a list of components.");
+            }
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
+    }
+
+    private void ApplyBackgroundColor(AndroidViewComponent component, int backgroundColor) {
+        // Save the original color in the dictionary
+        originalColors.put(component, backgroundColor);
+
+        // Apply the color to the component
+        View view = component.getView();
+        // Update the background color of the Drawable
+        if (view.getBackground() instanceof GradientDrawable) {
+            GradientDrawable gradientDrawable = (GradientDrawable) view.getBackground();
+            gradientDrawable.setColor(backgroundColor);
+        } else {
+            // If the background is not a GradientDrawable, set the background color directly
+            view.setBackgroundColor(backgroundColor);
+        }
+    }
+
+    /**
+     * Returns the original background color of a component, if available.
+     *
+     * @param component The component from which you want to get the original background color.
+     * @return The original background color value, or null if not found in the dictionary.
+     * @throws IllegalArgumentException If the component is null.
+     */
+    @SimpleFunction(description = "Return the background color.")
+    public Object ReturnBackgroundColor(AndroidViewComponent component){
+        if (component == null) {
+            throw new IllegalArgumentException("The component cannot be null.");
+        }
+        View view = component.getView();
+        if (originalColors.containsKey(component)) {
+            // If the component is in the dictionary, set the original color as the background
+            return originalColors.get(component);
+        }
+        else if (view.getBackground() instanceof ColorDrawable) {
+            // Get the background color of the component
+            return (Integer)(((ColorDrawable)view.getBackground()).getColor());
+        }
+        else{
+            return Color.LTGRAY;
+        }
+    }
+
+    
+    //////////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////Seccion: Margenes////////////////////////////////////////
+
+
+    /**
+     * Apply equal margins to all sides of a component.
+     *
+     * @param component The component to which margins will be applied.
+     * @param margin The margin value to apply to all sides.
+     * @throws IllegalArgumentException If the component is null.
+     */
+    @SimpleFunction(description = "Apply equal margins to all sides of a component.")
+    public void ApplyMarginAll(Object components, int margin) {
+        if (components == null) {
+            throw new IllegalArgumentException("The component cannot be null.");
+        }
+        if (components instanceof AndroidViewComponent) {
+            AndroidViewComponent component = (AndroidViewComponent) components;
+            ApplyMargins(component, margin, margin, margin, margin);
+        } else if (components instanceof YailList) {
+            YailList componentList = (YailList) components;
+            for (Object componentObj : componentList.toArray()) {
+                if (componentObj instanceof AndroidViewComponent) {
+                    AndroidViewComponent component = (AndroidViewComponent) componentObj;
+                    ApplyMargins(component, margin, margin, margin, margin);
+                }
+            }
+        } else {
+            throw new IllegalArgumentException("The components argument is not valid. It should be a component or a list of components.");
+        }
+    }
+
+    /**
+     * Apply custom margins to a component.
+     *
+     * @param component The component to which margins will be applied.
+     * @param left The left margin.
+     * @param top The top margin.
+     * @param right The right margin.
+     * @param bottom The bottom margin.
+     * @throws IllegalArgumentException If the component is null.
+     */
+    @SimpleFunction(description = "Apply custom margins to a component.")
+    public void ApplyCustomMargins(Object components, int left, int top, int right, int bottom) {
+        if (components == null) {
+            throw new IllegalArgumentException("The component cannot be null.");
+        }
+        if (components instanceof AndroidViewComponent) {
+            AndroidViewComponent component = (AndroidViewComponent) components;
+            ApplyMargins(component, left, top, right, bottom);
+        } else if (components instanceof YailList) {
+            YailList componentList = (YailList) components;
+            for (Object componentObj : componentList.toArray()) {
+                if (componentObj instanceof AndroidViewComponent) {
+                    AndroidViewComponent component = (AndroidViewComponent) componentObj;
+                    ApplyMargins(component, left, top, right, bottom);
+                }
+            }
+        } else {
+            throw new IllegalArgumentException("The components argument is not valid. It should be a component or a list of components.");
+        }
+    }
+
+    /**
+     * Apply margins to the component.
+     *
+     * @param component The component to which margins will be applied.
+     * @param left The left margin.
+     * @param top The top margin.
+     * @param right The right margin.
+     * @param bottom The bottom margin.
+     * @throws IllegalArgumentException If the component is null.
+     */
+    public void ApplyMargins(AndroidViewComponent component, int left, int top, int right, int bottom) {
+        // Get the view associated with the AndroidViewComponent
+        View view = component.getView();
+        // Apply the margins
+        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
+        params.setMargins(left, top, right, bottom);
+
+        // Call requestLayout to update the layout of the view
+        view.requestLayout();
+    }
+
+
+    //////////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////Seccion: Padding///////////////////////////////////////
+
+
+    @SimpleFunction(description = "Apply equal paddings to all sides of a component.")
+    public void AddPaddingAll(Object components, int paddings){
+        if (components == null) {
+            throw new IllegalArgumentException("The component cannot be null.");
+        }
+        if (components instanceof AndroidViewComponent) {
+            AndroidViewComponent component = (AndroidViewComponent) components;
+            ApplyPaddings(component, paddings, paddings, paddings, paddings);
+        } else if (components instanceof YailList) {
+            YailList componentList = (YailList) components;
+            for (Object componentObj : componentList.toArray()) {
+                if (componentObj instanceof AndroidViewComponent) {
+                    AndroidViewComponent component = (AndroidViewComponent) componentObj;
+                    ApplyPaddings(component, paddings, paddings, paddings, paddings);
+                }
+            }
+        } else {
+            throw new IllegalArgumentException("The components argument is not valid. It should be a component or a list of components.");
+        }
+    }
+
+    @SimpleFunction(description = "Apply custom paddings to a component")
+    public void AddCustomPadding(Object components, int leftPadding, int rightPadding, int topPadding, int bottomPadding) {
+        if (components == null) {
+            throw new IllegalArgumentException("The component cannot be null.");
+        }
+        if (components instanceof AndroidViewComponent) {
+            AndroidViewComponent component = (AndroidViewComponent) components;
+            ApplyPaddings(component, leftPadding, rightPadding, topPadding, bottomPadding);
+        } else if (components instanceof YailList) {
+            YailList componentList = (YailList) components;
+            for (Object componentObj : componentList.toArray()) {
+                if (componentObj instanceof AndroidViewComponent) {
+                    AndroidViewComponent component = (AndroidViewComponent) componentObj;
+                    ApplyPaddings(component, leftPadding, rightPadding, topPadding, bottomPadding);
+                }
+            }
+        } else {
+            throw new IllegalArgumentException("The components argument is not valid. It should be a component or a list of components.");
+        }
+    }
+
+    public void ApplyPaddings(AndroidViewComponent component, int leftPadding, int rightPadding, int topPadding, int bottomPadding){
+        View view = component.getView();
+        view.setPadding(leftPadding, topPadding, rightPadding, bottomPadding);
+        view.requestLayout();
+        ChangeBackgroundColor(component, ReturnBackgroundColor(component));
+    }
+       
+
+    //////////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////Seccion: Redondear Bordes////////////////////////////////////
+
+
+    /**
+     * Apply equal corner radii to all edges of a component to round them.
+     *
+     * @param component The component to which corner radii will be applied.
+     * @param round The corner radius value to apply to all sides.
+     * @throws IllegalArgumentException If the component is null.
+     */
+    @SimpleFunction(description = "Apply equal corner radii to all edges of a component.")
+    public void RoundAllCorners(Object components, float round) {
+        if (components == null) {
+            throw new IllegalArgumentException("The component cannot be null.");
+        }
+        if (components instanceof AndroidViewComponent) {
+            AndroidViewComponent component = (AndroidViewComponent) components;
+            ApplyCornerRadiiToView(component, round, round, round, round);
+        } else if (components instanceof YailList) {
+            YailList componentList = (YailList) components;
+            for (Object componentObj : componentList.toArray()) {
+                if (componentObj instanceof AndroidViewComponent) {
+                    AndroidViewComponent component = (AndroidViewComponent) componentObj;
+                    ApplyCornerRadiiToView(component, round, round, round, round);
+                }
+            }
+        } else {
+            throw new IllegalArgumentException("The components argument is not valid. It should be a component or a list of components.");
+        }
+    }
+
+    /**
+     * Apply custom corner radii to each edge of a component.
+     *
+     * @param component The component to which corner radii will be applied.
+     * @param topLeft Radius for the top-left corner.
+     * @param topRight Radius for the top-right corner.
+     * @param bottomLeft Radius for the bottom-left corner.
+     * @param bottomRight Radius for the bottom-right corner.
+     * @throws IllegalArgumentException If the component is null.
+     */
+    @SimpleFunction(description = "Apply custom corner radii to a component.")
+    public void RoundCorners(Object components, float topLeft, float topRight, float bottomLeft, float bottomRight) {
+        if (components == null) {
+            throw new IllegalArgumentException("The component cannot be null.");
+        }
+        if (components instanceof AndroidViewComponent) {
+            AndroidViewComponent component = (AndroidViewComponent) components;
+            ApplyCornerRadiiToView(component, topLeft, topRight, bottomLeft, bottomRight);
+        } else if (components instanceof YailList) {
+            YailList componentList = (YailList) components;
+            for (Object componentObj : componentList.toArray()) {
+                if (componentObj instanceof AndroidViewComponent) {
+                    AndroidViewComponent component = (AndroidViewComponent) componentObj;
+                    ApplyCornerRadiiToView(component, topLeft, topRight, bottomLeft, bottomRight);
+                }
+            }
+        } else {
+            throw new IllegalArgumentException("The components argument is not valid. It should be a component or a list of components.");
+        }
+    }
+
+    /**
+     * Apply the configured corner radii to the component and restore the original background color.
+     *
+     * @param component The component to which corner radii will be applied.
+     * @param radiusTopLeft Radius for the top-left corner.
+     * @param radiusTopRight Radius for the top-right corner.
+     * @param radiusBottomLeft Radius for the bottom-left corner.
+     * @param radiusBottomRight Radius for the bottom-right corner.
+     * @throws IllegalArgumentException If the component is null.
+     */
+    public void ApplyCornerRadiiToView(AndroidViewComponent component, float radiusTopLeft, float radiusTopRight, float radiusBottomLeft, float radiusBottomRight) {
+        // Get the view associated with the AndroidViewComponent
+        View view = component.getView();
+    
+        // Get the existing background drawable, or create a new GradientDrawable if it doesn't exist
+        GradientDrawable roundedDrawable;
+        Drawable currentBackground = view.getBackground();
+        if (currentBackground instanceof GradientDrawable) {
+            roundedDrawable = (GradientDrawable) currentBackground;
+        } else {
+            roundedDrawable = new GradientDrawable();
+        }
+    
+        // Set the corner radii
+        roundedDrawable.setShape(GradientDrawable.RECTANGLE);
+        roundedDrawable.setCornerRadii(new float[]{
+            radiusTopLeft, radiusTopLeft,
+            radiusTopRight, radiusTopRight,
+            radiusBottomRight, radiusBottomRight,
+            radiusBottomLeft, radiusBottomLeft
+        });
+
+        Object originalColorValue;
+        // Check if the component is in the dictionary
+        if (originalColors.containsKey(component)) {
+            // If the component is in the dictionary, set the original color to the background
+            originalColorValue = originalColors.get(component);
+        } else if (view.getBackground() instanceof ColorDrawable) {
+            // Get the component's background color
+            originalColorValue = (Integer)(((ColorDrawable)view.getBackground()).getColor());
+        } else {
+            // Set a default color
+            originalColorValue = Color.LTGRAY; // Default color (you can change it if desired)
+        }
+        // Apply the rounded Drawable to the view
+        view.setBackground(roundedDrawable);
+        // Ensure that the content does not overflow
+        view.setClipToOutline(true);
+        // Restore the original background
+        ChangeBackgroundColor(component, originalColorValue);
+    }
+
+
+    //////////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////Seccion: Bordes//////////////////////////////////////////
+
+    
+    @SimpleFunction(description = "Apply border to a component.")
+    public void ApplyBorderToView(AndroidViewComponent component, int borderColor, int borderWidth) {
+        // Get the view associated with the AndroidViewComponent
+        View view = component.getView();
+
+        // Get the existing background drawable, or create a new GradientDrawable if it doesn't exist
+        GradientDrawable roundedDrawable;
+        Drawable currentBackground = view.getBackground();
+        if (currentBackground instanceof GradientDrawable) {
+            roundedDrawable = (GradientDrawable) currentBackground;
+        } else {
+            roundedDrawable = new GradientDrawable();
+        }
+
+        // Set the border color and width
+        roundedDrawable.setStroke(borderWidth, borderColor);
+
+        // Apply the updated Drawable to the view
+        view.setBackground(roundedDrawable);
+    }
+    
+
+    //////////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////Seccion: Sombreado///////////////////////////////////////
+
+}
