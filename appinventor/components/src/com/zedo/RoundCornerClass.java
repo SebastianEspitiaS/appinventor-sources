@@ -3,8 +3,6 @@ package com.zedo;
 import com.google.appinventor.components.runtime.AndroidViewComponent;
 import com.google.appinventor.components.runtime.util.YailList;
 
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.view.View;
@@ -93,6 +91,12 @@ public class RoundCornerClass {
         } else {
             roundedDrawable = new GradientDrawable();
         }
+
+         // Restaurar la configuración original del borde y el color del borde
+        BorderInfo borderInfo = BorderInfo.getBorderInfoMap().get(component);
+        if (borderInfo != null) {
+            roundedDrawable.setStroke(borderInfo.getWidth(), borderInfo.getColor());
+        }
     
         // Set the corner radii
         roundedDrawable.setShape(GradientDrawable.RECTANGLE);
@@ -102,24 +106,20 @@ public class RoundCornerClass {
             radiusBottomRight, radiusBottomRight,
             radiusBottomLeft, radiusBottomLeft
         });
-
+    
         Object originalColorValue;
         // Check if the component is in the dictionary
-        if (backGroundColorClass.getOriginalColors().containsKey(component)) {
-            // If the component is in the dictionary, set the original color to the background
-            originalColorValue = backGroundColorClass.getOriginalColors().get(component);
-        } else if (view.getBackground() instanceof ColorDrawable) {
-            // Get the component's background color
-            originalColorValue = (Integer)(((ColorDrawable)view.getBackground()).getColor());
-        } else {
-            // Set a default color
-            originalColorValue = Color.LTGRAY; // Default color (you can change it if desired)
+        if (!BackGroundColorClass.getOriginalColors().containsKey(component)) {
+            // If the component is not in the dictionary, set the original color to the background
+            BackGroundColorClass.getOriginalColors().put(component, BackGroundColorClass.ReturnBackgroundColor(component));
         }
+        originalColorValue = BackGroundColorClass.getOriginalColors().get(component);
+    
         // Apply the rounded Drawable to the view
         view.setBackground(roundedDrawable);
         // Ensure that the content does not overflow
         view.setClipToOutline(true);
         // Restore the original background
-        backGroundColorClass.ChangeBackgroundColor(component, originalColorValue);
+        BackGroundColorClass.ChangeBackgroundColor(component, originalColorValue);
     }
 }

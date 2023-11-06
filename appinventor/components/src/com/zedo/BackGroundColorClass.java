@@ -18,17 +18,17 @@ import gnu.math.IntNum;
 public class BackGroundColorClass {
 
     // Color dictionary
-    private HashMap<AndroidViewComponent, Integer> originalColors = new HashMap<>();
+    private static HashMap<AndroidViewComponent, Integer> originalColors = new HashMap<>();
 
     public BackGroundColorClass() {
     }
 
-    public HashMap<AndroidViewComponent,Integer> getOriginalColors() {
-        return this.originalColors;
+    public static HashMap<AndroidViewComponent,Integer> getOriginalColors() {
+        return originalColors;
     }
 
     public void setOriginalColors(HashMap<AndroidViewComponent,Integer> originalColors) {
-        this.originalColors = originalColors;
+        BackGroundColorClass.originalColors = originalColors;
     }
 
     /**
@@ -38,7 +38,7 @@ public class BackGroundColorClass {
      * @param colorValue The color value, which can be an integer, HEX string, RGB, or ARGB.
      * @throws IllegalArgumentException If the component is null, the color value is invalid, or the type is not supported.
      */
-    public void ChangeBackgroundColor(Object components, Object colorValue) {
+    public static void ChangeBackgroundColor(Object components, Object colorValue) {
         if (components == null) {
             throw new IllegalArgumentException("The component cannot be null.");
         }
@@ -108,7 +108,7 @@ public class BackGroundColorClass {
         }
     }
 
-    private void ApplyBackgroundColor(AndroidViewComponent component, int backgroundColor) {
+    private static void ApplyBackgroundColor(AndroidViewComponent component, int backgroundColor) {
         // Save the original color in the dictionary
         originalColors.put(component, backgroundColor);
 
@@ -131,7 +131,7 @@ public class BackGroundColorClass {
      * @return The original background color value, or null if not found in the dictionary.
      * @throws IllegalArgumentException If the component is null.
      */
-    public Object ReturnBackgroundColor(AndroidViewComponent component){
+    public static int ReturnBackgroundColor(AndroidViewComponent component){
         if (component == null) {
             throw new IllegalArgumentException("The component cannot be null.");
         }
@@ -154,7 +154,7 @@ public class BackGroundColorClass {
                 return ((VerticalArrangement) component).BackgroundColor();
             }
             else{
-                return (Integer) (((ColorDrawable)view.getBackground()).getColor());
+                return (Integer)(((ColorDrawable)view.getBackground()).getColor());
             }
         }
         else{

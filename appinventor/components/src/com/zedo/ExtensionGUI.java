@@ -43,12 +43,12 @@ public class ExtensionGUI extends AndroidNonvisibleComponent {
 
     @SimpleFunction(description = "Change background color (HEX, RGB, ARGB, Integer, or color blocks)")
     public void ChangeBackgroundColor(Object components, Object colorValue) {
-        backGroundColorClass.ChangeBackgroundColor(components, colorValue);
+        BackGroundColorClass.ChangeBackgroundColor(components, colorValue);
     }
 
     @SimpleFunction(description = "Return the background color.")
     public Object ReturnBackgroundColor(AndroidViewComponent component){
-        return backGroundColorClass.ReturnBackgroundColor(component);
+        return BackGroundColorClass.ReturnBackgroundColor(component);
     }
 
 

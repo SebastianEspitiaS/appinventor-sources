@@ -31,11 +31,21 @@ public class BorderClass {
             roundedDrawable = new GradientDrawable();
         }
 
+        Object originalColorValue;
+        // Check if the component is in the dictionary
+        if (!BackGroundColorClass.getOriginalColors().containsKey(component)) {
+            // If the component is not in the dictionary, set the original color to the background
+            BackGroundColorClass.getOriginalColors().put(component, BackGroundColorClass.ReturnBackgroundColor(component));
+        }
+        originalColorValue = BackGroundColorClass.getOriginalColors().get(component);
+
         // Set the border color and width
         roundedDrawable.setStroke(borderWidth, borderColor);
 
+        BorderInfo.getBorderInfoMap().put(component, new BorderInfo(borderColor, borderWidth));
+
         // Apply the updated Drawable to the view
         view.setBackground(roundedDrawable);
+        BackGroundColorClass.ChangeBackgroundColor(component, originalColorValue);
     }
-
 }

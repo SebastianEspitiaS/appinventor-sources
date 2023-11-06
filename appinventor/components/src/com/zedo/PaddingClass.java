@@ -37,7 +37,6 @@ public class PaddingClass {
         }
     }
 
-
     /**
      * Applies custom paddings to a component.
      *
@@ -68,7 +67,6 @@ public class PaddingClass {
         }
     }
 
-
     /**
      * Applies custom paddings to a component and changes the background color.
      *
@@ -81,7 +79,7 @@ public class PaddingClass {
     public void ApplyPaddings(AndroidViewComponent component, int leftPadding, int rightPadding, int topPadding, int bottomPadding, BackGroundColorClass backGroundColorClass){
         View view = component.getView();
         view.setPadding(leftPadding, topPadding, rightPadding, bottomPadding);
+        BackGroundColorClass.ChangeBackgroundColor(component, BackGroundColorClass.ReturnBackgroundColor(component));
         view.requestLayout();
-        backGroundColorClass.ChangeBackgroundColor(component, backGroundColorClass.ReturnBackgroundColor(component));
     }
 }
