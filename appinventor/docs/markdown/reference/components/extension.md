@@ -41,10 +41,10 @@ None
 {:id="ExtensionGUI.ApplyBorderToView" class="method"} <i/> ApplyBorderToView(*component*{:.component},*borderColor*{:.number},*borderWidth*{:.number})
 : Apply border to a component.
 
-{:id="ExtensionGUI.ApplyCustomMargins" class="method"} <i/> ApplyCustomMargins(*components*{:.any},*left*{:.number},*top*{:.number},*right*{:.number},*bottom*{:.number})
+{:id="ExtensionGUI.ApplyCustomMargins" class="method"} <i/> ApplyCustomMargins(*components*{:.any},*left*{:.number},*top*{:.number},*right*{:.number},*bottom*{:.number},*isPercentage*{:.boolean})
 : Apply custom margins to a component.
 
-{:id="ExtensionGUI.ApplyMarginAll" class="method"} <i/> ApplyMarginAll(*components*{:.any},*margin*{:.number})
+{:id="ExtensionGUI.ApplyMarginAll" class="method"} <i/> ApplyMarginAll(*components*{:.any},*margin*{:.number},*isPercentage*{:.boolean})
 : Apply equal margins to all sides of a component.
 
 {:id="ExtensionGUI.ChangeBackgroundColor" class="method"} <i/> ChangeBackgroundColor(*components*{:.any},*colorValue*{:.any})

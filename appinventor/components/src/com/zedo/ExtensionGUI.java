@@ -7,7 +7,6 @@ import com.google.appinventor.components.common.ComponentCategory;
 import com.google.appinventor.components.runtime.AndroidNonvisibleComponent;
 import com.google.appinventor.components.runtime.ComponentContainer;
 import com.google.appinventor.components.runtime.AndroidViewComponent;
-import com.google.appinventor.components.runtime.Label;
 
 @DesignerComponent(
     version = 1,
@@ -28,14 +27,6 @@ public class ExtensionGUI extends AndroidNonvisibleComponent {
         super(container.$form());
     }
 
-    @SimpleFunction(description = "Ver el tipo de dato del componente.")
-    public void TipoDato(AndroidViewComponent component, Object value){
-        if (component instanceof Label) {
-            Label label = (Label) component;
-            String texto = value.getClass().getName();
-            label.Text(texto);
-        } 
-    }
 
     //////////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////Section: Background//////////////////////////////////////
@@ -53,17 +44,17 @@ public class ExtensionGUI extends AndroidNonvisibleComponent {
 
 
     //////////////////////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////Seccion: Margenes////////////////////////////////////////
+    /////////////////////////////////Section: Margins////////////////////////////////////////
 
 
     @SimpleFunction(description = "Apply equal margins to all sides of a component.")
-    public void ApplyMarginAll(Object components, int margin) {
-        marginClass.ApplyMarginAll(components, margin);
+    public void ApplyMarginAll(Object components, int margin, boolean isPercentage) {
+        marginClass.ApplyMarginAll(components, margin, isPercentage);
     }
 
     @SimpleFunction(description = "Apply custom margins to a component.")
-    public void ApplyCustomMargins(Object components, int left, int top, int right, int bottom) {
-        marginClass.ApplyCustomMargins(components, left, top, right, bottom);
+    public void ApplyCustomMargins(Object components, int left, int top, int right, int bottom, boolean isPercentage) {
+        marginClass.ApplyCustomMargins(components, left, top, right, bottom, isPercentage);
     }
 
     public void ApplyMargins(AndroidViewComponent component, int left, int top, int right, int bottom) {
@@ -72,7 +63,7 @@ public class ExtensionGUI extends AndroidNonvisibleComponent {
 
 
     //////////////////////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////Seccion: Padding///////////////////////////////////////
+    /////////////////////////////////Section: Paddings///////////////////////////////////////
 
 
     @SimpleFunction(description = "Apply equal paddings to all sides of a component.")
@@ -91,7 +82,7 @@ public class ExtensionGUI extends AndroidNonvisibleComponent {
        
 
     //////////////////////////////////////////////////////////////////////////////////////////
-    /////////////////////////////Seccion: Redondear Bordes////////////////////////////////////
+    /////////////////////////////Section: Round Corners////////////////////////////////////
 
 
     @SimpleFunction(description = "Apply equal corner radii to all edges of a component.")
@@ -110,7 +101,7 @@ public class ExtensionGUI extends AndroidNonvisibleComponent {
 
 
     //////////////////////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////Seccion: Bordes//////////////////////////////////////////
+    /////////////////////////////////Section: Borders//////////////////////////////////////////
 
 
     @SimpleFunction(description = "Apply border to a component.")
