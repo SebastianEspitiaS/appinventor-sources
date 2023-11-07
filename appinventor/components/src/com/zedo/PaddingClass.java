@@ -37,7 +37,6 @@ public class PaddingClass {
         }
     }
 
-
     /**
      * Applies custom paddings to a component.
      *
@@ -67,7 +66,6 @@ public class PaddingClass {
             throw new IllegalArgumentException("The components argument is not valid. It should be a component or a list of components.");
         }
     }
-
 
     /**
      * Applies custom paddings to a component and changes the background color.

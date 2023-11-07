@@ -46,7 +46,7 @@ public class MarginClass {
             throw new IllegalArgumentException("The components argument is not valid. It should be a component or a list of components.");
         }
     }
-
+    
     /**
      * Apply custom margins to a component.
      *
@@ -84,7 +84,7 @@ public class MarginClass {
             throw new IllegalArgumentException("The components argument is not valid. It should be a component or a list of components.");
         }
     }
-
+    
     /**
      * Apply margins to the component.
      *
@@ -101,34 +101,34 @@ public class MarginClass {
         // Apply the margins
         MarginLayoutParams params = (MarginLayoutParams) view.getLayoutParams();
         params.setMargins(left, top, right, bottom);
-
+    
         // Call requestLayout to update the layout of the view
         view.requestLayout();
     }
-
+    
     public void ApplyMarginsInPercentage(AndroidViewComponent component, int left, int top, int right, int bottom) {
-    // Get the view associated with the AndroidViewComponent
-    View view = component.getView();
-
-    // Get the parent view's width and height
-    ViewParent parent = view.getParent();
-    if (parent instanceof View) {
-        int parentWidth = ((View) parent).getWidth();
-        int parentHeight = ((View) parent).getHeight();
-
-        // Calculate margins in pixels from percentages
-        int leftMargin = (int) (parentWidth * (left / 100f));
-        int topMargin = (int) (parentHeight * (top / 100f));
-        int rightMargin = (int) (parentWidth * (right / 100f));
-        int bottomMargin = (int) (parentHeight * (bottom / 100f));
-
-        // Apply the margins
-        MarginLayoutParams params = (MarginLayoutParams) view.getLayoutParams();
-        params.setMargins(leftMargin, topMargin, rightMargin, bottomMargin);
-
-        // Call requestLayout to update the layout of the view
-        view.requestLayout();
+        // Get the view associated with the AndroidViewComponent
+        View view = component.getView();
+        
+        // Get the parent view's width and height
+        ViewParent parent = view.getParent();
+        if (parent instanceof View) {
+            int parentWidth = ((View) parent).getWidth();
+            int parentHeight = ((View) parent).getHeight();
+        
+            // Calculate margins in pixels from percentages
+            int leftMargin = (int) (parentWidth * (left / 100f));
+            int topMargin = (int) (parentHeight * (top / 100f));
+            int rightMargin = (int) (parentWidth * (right / 100f));
+            int bottomMargin = (int) (parentHeight * (bottom / 100f));
+        
+            // Apply the margins
+            MarginLayoutParams params = (MarginLayoutParams) view.getLayoutParams();
+            params.setMargins(leftMargin, topMargin, rightMargin, bottomMargin);
+        
+            // Call requestLayout to update the layout of the view
+            view.requestLayout();
+        }
     }
-}
 
 }

@@ -3,7 +3,6 @@ package com.zedo;
 import java.util.HashMap;
 
 import com.google.appinventor.components.runtime.AndroidViewComponent;
-import com.google.appinventor.components.runtime.HVArrangement;
 import com.google.appinventor.components.runtime.HorizontalArrangement;
 import com.google.appinventor.components.runtime.HorizontalScrollArrangement;
 import com.google.appinventor.components.runtime.VerticalArrangement;
