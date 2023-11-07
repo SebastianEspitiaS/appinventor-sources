@@ -34,12 +34,12 @@ public class ExtensionGUI extends AndroidNonvisibleComponent {
 
     @SimpleFunction(description = "Change background color (HEX, RGB, ARGB, Integer, or color blocks)")
     public void ChangeBackgroundColor(Object components, Object colorValue) {
-        BackGroundColorClass.ChangeBackgroundColor(components, colorValue);
+        backGroundColorClass.ChangeBackgroundColor(components, colorValue);
     }
 
     @SimpleFunction(description = "Return the background color.")
     public Object ReturnBackgroundColor(AndroidViewComponent component){
-        return BackGroundColorClass.ReturnBackgroundColor(component);
+        return backGroundColorClass.ReturnBackgroundColor(component);
     }
 
 
@@ -48,17 +48,13 @@ public class ExtensionGUI extends AndroidNonvisibleComponent {
 
 
     @SimpleFunction(description = "Apply equal margins to all sides of a component.")
-    public void ApplyMarginAll(Object components, int margin, boolean isPercentage) {
+    public void MarginAll(Object components, int margin, boolean isPercentage) {
         marginClass.ApplyMarginAll(components, margin, isPercentage);
     }
 
     @SimpleFunction(description = "Apply custom margins to a component.")
-    public void ApplyCustomMargins(Object components, int left, int top, int right, int bottom, boolean isPercentage) {
+    public void CustomMargins(Object components, int left, int top, int right, int bottom, boolean isPercentage) {
         marginClass.ApplyCustomMargins(components, left, top, right, bottom, isPercentage);
-    }
-
-    public void ApplyMargins(AndroidViewComponent component, int left, int top, int right, int bottom) {
-        marginClass.ApplyMargins(component, left, top, right, bottom);
     }
 
 
@@ -67,17 +63,13 @@ public class ExtensionGUI extends AndroidNonvisibleComponent {
 
 
     @SimpleFunction(description = "Apply equal paddings to all sides of a component.")
-    public void AddPaddingAll(Object components, int paddings){
+    public void PaddingAll(Object components, int paddings){
        paddingClass.AddPaddingAll(components, paddings, backGroundColorClass);
     }
 
     @SimpleFunction(description = "Apply custom paddings to a component")
-    public void AddCustomPadding(Object components, int leftPadding, int rightPadding, int topPadding, int bottomPadding) {
+    public void CustomPadding(Object components, int leftPadding, int rightPadding, int topPadding, int bottomPadding) {
         paddingClass.AddCustomPadding(components, leftPadding, rightPadding, topPadding, bottomPadding, backGroundColorClass);
-    }
-
-    public void ApplyPaddings(AndroidViewComponent component, int leftPadding, int rightPadding, int topPadding, int bottomPadding){
-        paddingClass.ApplyPaddings(component, leftPadding, rightPadding, topPadding, bottomPadding, backGroundColorClass);
     }
        
 
@@ -95,7 +87,7 @@ public class ExtensionGUI extends AndroidNonvisibleComponent {
         cornerClass.RoundCorners(components, topLeft, topRight, bottomLeft, bottomRight, backGroundColorClass);
     }
 
-    public void ApplyCornerRadiiToView(AndroidViewComponent component, float radiusTopLeft, float radiusTopRight, float radiusBottomLeft, float radiusBottomRight) {
+    public void CornerRadiiToView(AndroidViewComponent component, float radiusTopLeft, float radiusTopRight, float radiusBottomLeft, float radiusBottomRight) {
         cornerClass.ApplyCornerRadiiToView(component, radiusTopLeft, radiusTopRight, radiusBottomLeft, radiusBottomRight, backGroundColorClass);
     }
 
@@ -106,7 +98,7 @@ public class ExtensionGUI extends AndroidNonvisibleComponent {
 
     @SimpleFunction(description = "Apply border to a component.")
     public void ApplyBorderToView(AndroidViewComponent component, int borderColor, int borderWidth) {
-        borderClass.ApplyBorderToView(component, borderColor, borderWidth);
+        borderClass.ApplyBorderToView(component, borderColor, borderWidth, backGroundColorClass);
     }
 
 }

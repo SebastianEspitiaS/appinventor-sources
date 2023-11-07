@@ -109,17 +109,17 @@ public class RoundCornerClass {
     
         Object originalColorValue;
         // Check if the component is in the dictionary
-        if (!BackGroundColorClass.getOriginalColors().containsKey(component)) {
+        if (!backGroundColorClass.getOriginalColors().containsKey(component)) {
             // If the component is not in the dictionary, set the original color to the background
-            BackGroundColorClass.getOriginalColors().put(component, BackGroundColorClass.ReturnBackgroundColor(component));
+            backGroundColorClass.getOriginalColors().put(component, backGroundColorClass.ReturnBackgroundColor(component));
         }
-        originalColorValue = BackGroundColorClass.getOriginalColors().get(component);
+        originalColorValue = backGroundColorClass.getOriginalColors().get(component);
     
         // Apply the rounded Drawable to the view
         view.setBackground(roundedDrawable);
         // Ensure that the content does not overflow
         view.setClipToOutline(true);
         // Restore the original background
-        BackGroundColorClass.ChangeBackgroundColor(component, originalColorValue);
+        backGroundColorClass.ChangeBackgroundColor(component, originalColorValue);
     }
 }

@@ -18,7 +18,7 @@ public class BorderClass {
      * @param borderColor The color of the border.
      * @param borderWidth The width of the border.
      */
-    public void ApplyBorderToView(AndroidViewComponent component, int borderColor, int borderWidth) {
+    public void ApplyBorderToView(AndroidViewComponent component, int borderColor, int borderWidth, BackGroundColorClass backGroundColorClass) {
         // Get the view associated with the AndroidViewComponent
         View view = component.getView();
 
@@ -33,11 +33,11 @@ public class BorderClass {
 
         Object originalColorValue;
         // Check if the component is in the dictionary
-        if (!BackGroundColorClass.getOriginalColors().containsKey(component)) {
+        if (!backGroundColorClass.getOriginalColors().containsKey(component)) {
             // If the component is not in the dictionary, set the original color to the background
-            BackGroundColorClass.getOriginalColors().put(component, BackGroundColorClass.ReturnBackgroundColor(component));
+            backGroundColorClass.getOriginalColors().put(component, backGroundColorClass.ReturnBackgroundColor(component));
         }
-        originalColorValue = BackGroundColorClass.getOriginalColors().get(component);
+        originalColorValue = backGroundColorClass.getOriginalColors().get(component);
 
         // Set the border color and width
         roundedDrawable.setStroke(borderWidth, borderColor);
@@ -46,6 +46,6 @@ public class BorderClass {
 
         // Apply the updated Drawable to the view
         view.setBackground(roundedDrawable);
-        BackGroundColorClass.ChangeBackgroundColor(component, originalColorValue);
+        backGroundColorClass.ChangeBackgroundColor(component, originalColorValue);
     }
 }

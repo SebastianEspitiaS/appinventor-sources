@@ -9,7 +9,6 @@ public class BorderInfo {
     private int color;
     private int width;
 
-    // En tu clase, declara un diccionario para mantener la configuración del borde por componente
     private static Map<AndroidViewComponent, BorderInfo> borderInfoMap = new HashMap<>();
 
     public BorderInfo(int color, int width) {
