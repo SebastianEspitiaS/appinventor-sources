@@ -3,8 +3,6 @@ package com.zedo;
 import com.google.appinventor.components.runtime.AndroidViewComponent;
 import com.google.appinventor.components.runtime.util.YailList;
 
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.view.View;
@@ -103,18 +101,13 @@ public class RoundCornerClass {
             radiusBottomLeft, radiusBottomLeft
         });
 
-        Object originalColorValue;
+        int originalColorValue;
         // Check if the component is in the dictionary
-        if (backGroundColorClass.getOriginalColors().containsKey(component)) {
-            // If the component is in the dictionary, set the original color to the background
-            originalColorValue = backGroundColorClass.getOriginalColors().get(component);
-        } else if (view.getBackground() instanceof ColorDrawable) {
-            // Get the component's background color
-            originalColorValue = (Integer)(((ColorDrawable)view.getBackground()).getColor());
-        } else {
-            // Set a default color
-            originalColorValue = Color.LTGRAY; // Default color (you can change it if desired)
+        if (!backGroundColorClass.getOriginalColors().containsKey(component)) {
+            // If the component is not in the dictionary, set the original color to the background
+            backGroundColorClass.getOriginalColors().put(component, backGroundColorClass.ReturnBackgroundColor(component));
         }
+        originalColorValue = backGroundColorClass.getOriginalColors().get(component);
         // Apply the rounded Drawable to the view
         view.setBackground(roundedDrawable);
         // Ensure that the content does not overflow

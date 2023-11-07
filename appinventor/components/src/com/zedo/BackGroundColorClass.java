@@ -6,6 +6,7 @@ import com.google.appinventor.components.runtime.AndroidViewComponent;
 import com.google.appinventor.components.runtime.HorizontalArrangement;
 import com.google.appinventor.components.runtime.HorizontalScrollArrangement;
 import com.google.appinventor.components.runtime.VerticalArrangement;
+import com.google.appinventor.components.runtime.Button;
 import com.google.appinventor.components.runtime.VerticalScrollArrangement;
 import com.google.appinventor.components.runtime.util.YailList;
 
@@ -131,7 +132,7 @@ public class BackGroundColorClass {
      * @return The original background color value, or null if not found in the dictionary.
      * @throws IllegalArgumentException If the component is null.
      */
-    public Object ReturnBackgroundColor(AndroidViewComponent component){
+    public int ReturnBackgroundColor(AndroidViewComponent component){
         if (component == null) {
             throw new IllegalArgumentException("The component cannot be null.");
         }
@@ -156,6 +157,9 @@ public class BackGroundColorClass {
             else{
                 return (Integer) (((ColorDrawable)view.getBackground()).getColor());
             }
+        }
+        else if (component instanceof Button){
+            return ((Button) component).BackgroundColor();
         }
         else{
             return Color.LTGRAY;

@@ -79,7 +79,7 @@ public class PaddingClass {
     public void ApplyPaddings(AndroidViewComponent component, int leftPadding, int rightPadding, int topPadding, int bottomPadding, BackGroundColorClass backGroundColorClass){
         View view = component.getView();
         view.setPadding(leftPadding, topPadding, rightPadding, bottomPadding);
-        view.requestLayout();
         backGroundColorClass.ChangeBackgroundColor(component, backGroundColorClass.ReturnBackgroundColor(component));
+        view.requestLayout();
     }
 }
