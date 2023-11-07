@@ -144,10 +144,10 @@ public class BackGroundColorClass {
             return ((VerticalArrangement) component).BackgroundColor();
         }
         else if (component instanceof HorizontalScrollArrangement){
-            return ((VerticalArrangement) component).BackgroundColor();
+            return ((HorizontalScrollArrangement) component).BackgroundColor();
         }
         else if (component instanceof VerticalScrollArrangement){
-            return ((VerticalArrangement) component).BackgroundColor();
+            return ((VerticalScrollArrangement) component).BackgroundColor();
         }
         else if (component instanceof Button){
             return ((Button) component).BackgroundColor();
