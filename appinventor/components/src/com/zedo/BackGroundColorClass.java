@@ -155,7 +155,7 @@ public class BackGroundColorClass {
                 return ((VerticalArrangement) component).BackgroundColor();
             }
             else{
-                return (Integer)(((ColorDrawable)view.getBackground()).getColor());
+                return (Integer) (((ColorDrawable)view.getBackground()).getColor());
             }
         }
         else{
