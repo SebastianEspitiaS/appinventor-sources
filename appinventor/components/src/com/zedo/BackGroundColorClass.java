@@ -132,7 +132,7 @@ public class BackGroundColorClass {
      * @return The original background color value, or null if not found in the dictionary.
      * @throws IllegalArgumentException If the component is null.
      */
-    public int ReturnBackgroundColor(AndroidViewComponent component){
+    public Object ReturnBackgroundColor(AndroidViewComponent component){
         if (component == null) {
             throw new IllegalArgumentException("The component cannot be null.");
         }
