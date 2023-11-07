@@ -28,10 +28,6 @@ public class BackGroundColorClass {
         return this.originalColors;
     }
 
-    public void setOriginalColors(HashMap<AndroidViewComponent,Integer> originalColors) {
-        this.originalColors = originalColors;
-    }
-
     /**
      * Change the background color of a component.
      *
@@ -141,25 +137,23 @@ public class BackGroundColorClass {
             // If the component is in the dictionary, set the original color as the background
             return originalColors.get(component);
         }
-        else if (view.getBackground() instanceof ColorDrawable) {
-            if (component instanceof HorizontalArrangement){
-                return ((HorizontalArrangement) component).BackgroundColor();
-            }
-            else if (component instanceof VerticalArrangement){
-                return ((VerticalArrangement) component).BackgroundColor();
-            }
-            else if (component instanceof HorizontalScrollArrangement){
-                return ((VerticalArrangement) component).BackgroundColor();
-            }
-            else if (component instanceof VerticalScrollArrangement){
-                return ((VerticalArrangement) component).BackgroundColor();
-            }
-            else{
-                return (Integer) (((ColorDrawable)view.getBackground()).getColor());
-            }
+        else if (component instanceof HorizontalArrangement){
+            return ((HorizontalArrangement) component).BackgroundColor();
+        }
+        else if (component instanceof VerticalArrangement){
+            return ((VerticalArrangement) component).BackgroundColor();
+        }
+        else if (component instanceof HorizontalScrollArrangement){
+            return ((VerticalArrangement) component).BackgroundColor();
+        }
+        else if (component instanceof VerticalScrollArrangement){
+            return ((VerticalArrangement) component).BackgroundColor();
         }
         else if (component instanceof Button){
             return ((Button) component).BackgroundColor();
+        }
+        else if (view.getBackground() instanceof ColorDrawable) {
+            return (Integer) (((ColorDrawable)view.getBackground()).getColor());
         }
         else{
             return Color.LTGRAY;

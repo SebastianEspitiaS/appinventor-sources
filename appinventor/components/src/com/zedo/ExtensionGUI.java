@@ -98,7 +98,7 @@ public class ExtensionGUI extends AndroidNonvisibleComponent {
 
     @SimpleFunction(description = "Apply border to a component.")
     public void ApplyBorderToView(AndroidViewComponent component, int borderColor, int borderWidth) {
-        borderClass.ApplyBorderToView(component, borderColor, borderWidth, backGroundColorClass);
+        borderClass.BorderToView(component, borderColor, borderWidth, backGroundColorClass);
     }
 
 }

@@ -91,6 +91,12 @@ public class RoundCornerClass {
         } else {
             roundedDrawable = new GradientDrawable();
         }
+
+        // Restaurar la configuración original del borde y el color del borde
+        BorderInfo borderInfo = BorderInfo.getBorderInfoMap().get(component);
+        if (borderInfo != null) {
+            roundedDrawable.setStroke(borderInfo.getWidth(), borderInfo.getColor());
+        }
     
         // Set the corner radii
         roundedDrawable.setShape(GradientDrawable.RECTANGLE);
